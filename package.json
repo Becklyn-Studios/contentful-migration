@@ -1,38 +1,43 @@
 {
-  "name": "@becklyn/contentful-migration",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "lint": "eslint . --max-warnings 0",
-    "format": "eslint . --fix",
-    "build": "npm run clean && swc . -d dist && tsc && chmod +x dist/bin/migrate.js",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "npm run lint && npm run build",
-    "preversion": "npm run lint",
-    "migrate": "node dist/bin/migrate.js"
-  },
-  "files": [
-    "dist/**/*"
-  ],
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
-  "bin": {
-    "migrate": "dist/bin/migrate.js"
-  },
-  "dependencies": {
-    "contentful-management": "^11.35.1",
-    "contentful-migration": "^4.25.0",
-    "dotenv": "^16.4.5",
-    "ts-node": "^10.9.2"
-  },
-  "devDependencies": {
-    "@dword-design/eslint-plugin-import-alias": "^5.1.1",
-    "@next/eslint-plugin-next": "^14.1.1",
-    "@swc/cli": "^0.3.14",
-    "@swc/core": "^1.7.28",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.15",
-    "next": "^14.2.15"
-  }
+    "name": "@becklyn/contentful-migration",
+    "version": "0.1.0",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 0",
+        "lint": "eslint . --max-warnings 0",
+        "format": "eslint . --fix",
+        "build": "npm run clean && swc . -d dist && tsc && chmod +x dist/bin/migrate.js",
+        "clean": "rm -rf dist",
+        "prepublishOnly": "npm run lint && npm run build",
+        "preversion": "npm run lint",
+        "migrate": "node dist/bin/migrate.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Becklyn-Studios/contentful-migration.git"
+    },
+    "files": [
+        "dist/**/*"
+    ],
+    "main": "dist/src/index.js",
+    "types": "dist/src/index.d.ts",
+    "bin": {
+        "migrate": "dist/bin/migrate.js"
+    },
+    "dependencies": {
+        "contentful-management": "^11.35.1",
+        "contentful-migration": "^4.25.0",
+        "dotenv": "^16.4.5",
+        "ts-node": "^10.9.2"
+    },
+    "devDependencies": {
+        "@becklyn/prettier": "^2.1.1",
+        "@dword-design/eslint-plugin-import-alias": "^5.1.1",
+        "@next/eslint-plugin-next": "^14.1.1",
+        "@swc/cli": "^0.3.14",
+        "@swc/core": "^1.7.28",
+        "eslint": "^8.57.1",
+        "eslint-config-next": "^14.2.15",
+        "next": "^14.2.15"
+    },
+    "prettier": "@becklyn/prettier"
 }
