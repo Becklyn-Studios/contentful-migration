@@ -1,3 +1,7 @@
+# v0.2.4
+
+-   (bug) Fix dependencies
+
 # v0.2.3
 
 -   (bug) Properly load config
