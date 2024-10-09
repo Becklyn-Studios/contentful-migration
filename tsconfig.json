@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "target": "es2017",
+        "module": "commonjs",
+        "declaration": true,
+        "outDir": "./dist",
+        "strict": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "emitDeclarationOnly": true,
+        "isolatedModules": true,
+        "lib": ["es2017", "dom"],
+        "allowJs": true,
+        "paths": {
+            "@/migrations/*": ["./migrations/*"]
+        }
+    },
+    "include": ["."],
+    "exclude": ["node_modules", "dist", "test"]
+}

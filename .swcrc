@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json.schemastore.org/swcrc",
+    "jsc": {
+        "baseUrl": ".",
+        "parser": {
+            "syntax": "typescript",
+            "dynamicImport": false,
+            "decorators": false
+        },
+        "target": "es5",
+        "externalHelpers": false,
+        "paths": {
+            "@/migrations/*": ["./migrations/*"]
+        }
+    },
+    "module": {
+        "strictMode": true,
+        "type": "commonjs"
+    },
+    "exclude": ["node_modules", "dist", "test"],
+    "minify": true
+}
