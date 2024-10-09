@@ -1,3 +1,7 @@
+# v0.2.3
+
+-   (bug) Properly load config
+
 # v0.2.2
 
 -   (bug) Do not override env variables
