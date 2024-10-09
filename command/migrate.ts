@@ -6,9 +6,16 @@ import { executeMigrations } from "@/migrations/migrator";
 import { BackendLanguage, ContentfulContentModelMigrationGenerator } from "@/migrations/types";
 
 export const executeMigrationCommand = async () => {
-    console.log("Executing migrations...");
+    console.log("Checking environment...");
 
     config();
+
+    if (process.env.CONTENTFUL_SKIP_MIGRATIONS === "true") {
+        console.log("CONTENTFUL_SKIP_MIGRATIONS flag set, skipping migrations and exiting early");
+        process.exit(0);
+    }
+
+    console.log("Executing migrations...");
 
     register({
         transpileOnly: true,
