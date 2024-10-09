@@ -1,3 +1,7 @@
+# v0.2.2
+
+-   (bug) Do not override env variables
+
 # v0.2.1
 
 -   (feature) Skip migrations by config

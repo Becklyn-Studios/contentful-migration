@@ -8,7 +8,7 @@ import { BackendLanguage, ContentfulContentModelMigrationGenerator } from "@/mig
 export const executeMigrationCommand = async () => {
     console.log("Checking environment...");
 
-    config();
+    config({ override: false });
 
     if (process.env.CONTENTFUL_SKIP_MIGRATIONS === "true") {
         console.log("CONTENTFUL_SKIP_MIGRATIONS flag set, skipping migrations and exiting early");
