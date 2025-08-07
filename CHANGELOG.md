@@ -1,6 +1,7 @@
 # v0.2.5
 
 -   (bug) update dependencies
+-   (chore) add @becklyn/eslint and @becklyn/tsconfig to project
 
 # v0.2.4
 

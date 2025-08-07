@@ -37,6 +37,7 @@ export const getExecutedMigrations = async (
         return [];
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let allVersions: any[] = [];
     let total: number | null = null;
     let skip = 0;
