@@ -1,3 +1,7 @@
+# v0.2.5
+
+-   (bug) update dependencies
+
 # v0.2.4
 
 -   (bug) Fix dependencies
