@@ -40,5 +40,8 @@
         "@swc/core": "^1.13.3",
         "next": "^15.4.6"
     },
+    "overrides": {
+        "tmp": "^0.2.4"
+    },
     "prettier": "@becklyn/prettier"
 }
