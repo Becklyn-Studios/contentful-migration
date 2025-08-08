@@ -1,3 +1,7 @@
+# v0.2.7
+
+- (bug) add missing "noEmit: false" to tsconfig
+
 # v0.2.6
 
 - (bug) Fix security vulnerabilities by overriding tmp package to v0.2.4

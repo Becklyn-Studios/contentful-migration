@@ -6,6 +6,7 @@
         "outDir": "./dist",
         "moduleResolution": "node",
         "emitDeclarationOnly": true,
+        "noEmit": false,
         "paths": {
             "@/migrations/*": ["./migrations/*"]
         }
