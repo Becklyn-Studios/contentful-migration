@@ -1,3 +1,7 @@
+# v0.2.8
+
+- (bug) update dependencies to fix vulnerabilities
+
 # v0.2.7
 
 - (bug) add missing "noEmit: false" to tsconfig
