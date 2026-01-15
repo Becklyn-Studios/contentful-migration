@@ -24,24 +24,24 @@
         "migrate": "dist/bin/migrate.js"
     },
     "dependencies": {
-        "contentful-management": "^11.54.4",
-        "contentful-migration": "^4.29.1",
+        "contentful-management": "^11.67.2",
+        "contentful-migration": "^4.31.5",
         "dotenv": "^17.2.3",
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0"
     },
     "devDependencies": {
-        "@becklyn/eslint": "^1.2.1",
-        "@becklyn/prettier": "^2.1.6",
+        "@becklyn/eslint": "^1.2.3",
+        "@becklyn/prettier": "^2.1.8",
         "@becklyn/tsconfig": "^1.1.3",
-        "@dword-design/eslint-plugin-import-alias": "^6.0.3",
-        "@next/eslint-plugin-next": "^15.5.7",
-        "@swc/cli": "^0.7.8",
-        "@swc/core": "^1.13.3",
-        "next": "^15.5.7"
+        "@dword-design/eslint-plugin-import-alias": "^8.1.3",
+        "@next/eslint-plugin-next": "^15.5.9",
+        "@swc/cli": "^0.7.10",
+        "@swc/core": "^1.15.8",
+        "next": "^15.5.9"
     },
     "overrides": {
-        "tmp": "^0.2.4"
+        "diff": "^8.0.3"
     },
     "prettier": "@becklyn/prettier"
 }
