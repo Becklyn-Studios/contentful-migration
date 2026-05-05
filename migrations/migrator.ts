@@ -1,5 +1,4 @@
-// import {  createClient } from "contentful-management";
-// import { runMigration } from "contentful-migration";
+import { createClient } from "contentful-management";
 import { runMigration } from "contentful-migration";
 import {
     ContentfulManagementClientConfig,
@@ -8,7 +7,6 @@ import {
     getExecutedMigrations,
 } from "./api";
 import { ContentfulContentModelMigration } from "./types";
-import { createClient } from "contentful-management";
 
 export const MIGRATIONS_MODEL_NAME = "migrationVersions";
 
@@ -59,22 +57,28 @@ const runSingleMigration = async (
 
     const client = createClient({ accessToken: config.managementToken });
 
-    const newVersionEntry = await client.entry.create({
-        contentTypeId: MIGRATIONS_MODEL_NAME,
-        environmentId: config.environmentId,
-        spaceId: config.spaceId,
-    }, {
-        fields: {
-                    version: { [locale]: migration.key },
-                    executedAt: { [locale]: new Date().toString() },
+    const newVersionEntry = await client.entry.create(
+        {
+            contentTypeId: MIGRATIONS_MODEL_NAME,
+            environmentId: config.environmentId,
+            spaceId: config.spaceId,
+        },
+        {
+            fields: {
+                version: { [locale]: migration.key },
+                executedAt: { [locale]: new Date().toString() },
+            },
         }
-    });
+    );
 
-    await client.entry.publish({
-        entryId: newVersionEntry.sys.id,
-        environmentId: config.environmentId,
-        spaceId: config.spaceId,
-    }, newVersionEntry);
+    await client.entry.publish(
+        {
+            entryId: newVersionEntry.sys.id,
+            environmentId: config.environmentId,
+            spaceId: config.spaceId,
+        },
+        newVersionEntry
+    );
 
     console.log(`💾 Saved ${migration.key} to ${MIGRATIONS_MODEL_NAME}`);
 };
