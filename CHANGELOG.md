@@ -1,3 +1,10 @@
+# v0.3.0
+
+- (bc) Require node 22
+- (improvement) Update dependencies
+- (internal) Improve logging
+- (internal) Use new (plain) client for contentful management API
+
 # v0.2.9
 
 - (bug) update dependencies to fix vulnerabilities

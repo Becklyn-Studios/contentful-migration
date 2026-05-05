@@ -1,4 +1,4 @@
-import { Environment, createClient } from "contentful-management";
+import { createClient } from "contentful-management";
 import { MIGRATIONS_MODEL_NAME } from "./migration";
 
 export interface ContentfulManagementClientConfig {
@@ -9,29 +9,58 @@ export interface ContentfulManagementClientConfig {
 
 export const connectToContentfulManagementApi = async (
     config: ContentfulManagementClientConfig
-): Promise<Environment> => {
+): Promise<void> => {
     const client = createClient({ accessToken: config.managementToken });
-    const space = await client.getSpace(config.spaceId);
-    return await space.getEnvironment(config.environmentId);
+    const space = await client.space.get({ spaceId: config.spaceId });
+    if (!space) {
+        throw new Error(`Space ${config.spaceId} not found`);
+    }
+    const environment = await client.environment.get({
+        spaceId: config.spaceId,
+        environmentId: config.environmentId,
+    });
+    if (!environment) {
+        throw new Error(`Environment ${config.environmentId} not found`);
+    }
 };
 
-export const getDefaultLocale = async (environment: Environment): Promise<string> => {
-    const { items: locales } = await environment.getLocales();
+export const getDefaultLocale = async (
+    config: ContentfulManagementClientConfig
+): Promise<string> => {
+    const client = createClient({ accessToken: config.managementToken });
+    const locales = await client.locale.getMany({
+        spaceId: config.spaceId,
+        environmentId: config.environmentId,
+    });
 
-    const defaultLocale = locales.find(locale => locale.default);
+    let defaultLocale: string | undefined;
 
-    return defaultLocale ? defaultLocale.code : "en-US";
+    for (const locale of locales.items) {
+        if (locale.default) {
+            defaultLocale = locale.code;
+            break;
+        }
+    }
+    return defaultLocale ? defaultLocale : "en-US";
 };
 
 export const getExecutedMigrations = async (
-    environment: Environment,
+    config: ContentfulManagementClientConfig,
     locale: string
 ): Promise<string[]> => {
+    const client = createClient({ accessToken: config.managementToken });
+
     let isInitialMigration = false;
 
-    await environment.getContentType(MIGRATIONS_MODEL_NAME).catch(() => {
-        isInitialMigration = true;
-    });
+    await client.contentType
+        .get({
+            contentTypeId: MIGRATIONS_MODEL_NAME,
+            spaceId: config.spaceId,
+            environmentId: config.environmentId,
+        })
+        .catch(() => {
+            isInitialMigration = true;
+        });
 
     if (isInitialMigration) {
         return [];
@@ -43,10 +72,10 @@ export const getExecutedMigrations = async (
     let skip = 0;
 
     while (total === null || total > allVersions.length) {
-        const { items: versions, total: newTotal } = await environment.getEntries({
-            content_type: MIGRATIONS_MODEL_NAME,
-            limit: 1000,
-            skip,
+        const { items: versions, total: newTotal } = await client.entry.getMany({
+            environmentId: config.environmentId,
+            spaceId: config.spaceId,
+            query: { content_type: MIGRATIONS_MODEL_NAME, limit: 1000, skip },
         });
 
         total = newTotal;

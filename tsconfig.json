@@ -1,5 +1,5 @@
 {
-    "extends": "@becklyn/tsconfig/nextjs.json",
+    "extends": "@becklyn/tsconfig/base.json",
     "compilerOptions": {
         "baseUrl": ".",
         "module": "commonjs",
@@ -7,9 +7,7 @@
         "moduleResolution": "node",
         "emitDeclarationOnly": true,
         "noEmit": false,
-        "paths": {
-            "@/migrations/*": ["./migrations/*"]
-        }
+        "paths": { "@/migrations/*": ["./migrations/*"] }
     },
     "include": ["."],
     "exclude": ["node_modules", "dist", "test"]

@@ -6,16 +6,18 @@ import { executeMigrations } from "@/migrations/migrator";
 import { BackendLanguage, ContentfulContentModelMigrationGenerator } from "@/migrations/types";
 
 export const executeMigrationCommand = async () => {
-    console.log("Checking environment...");
+    console.log("🔄 Checking environment...");
 
-    config({ path: [".env.local", ".env"] });
+    config({ path: [".env.local", ".env"], quiet: true });
 
     if (process.env.CONTENTFUL_SKIP_MIGRATIONS === "true") {
-        console.log("CONTENTFUL_SKIP_MIGRATIONS flag set, skipping migrations and exiting early");
+        console.log(
+            "⚠️ CONTENTFUL_SKIP_MIGRATIONS flag set, skipping migrations and exiting early"
+        );
         process.exit(0);
     }
 
-    console.log("Executing migrations...");
+    console.log("🔄 Executing migrations...");
 
     register({
         transpileOnly: true,
@@ -31,38 +33,39 @@ export const executeMigrationCommand = async () => {
         },
     });
 
-    registerPaths({
-        baseUrl: ".",
-        paths: {
-            "@/migrations/*": ["./migrations/*"],
-        },
-    });
+    registerPaths({ baseUrl: ".", paths: { "@/migrations/*": ["./migrations/*"] } });
 
     let migrationsFile = process.env.CONTENTFUL_MIGRATIONS_FILE ?? "./migrations/index.ts";
 
-    console.log(`Loading migrations from file ${migrationsFile}`);
+    console.log(`🔄 Loading migrations from file ${migrationsFile}`);
 
     if (migrationsFile.startsWith("./")) {
         migrationsFile = process.cwd() + migrationsFile.slice(1);
     }
 
-    let migrationGenerators: ContentfulContentModelMigrationGenerator[] = [];
+    let migrationGenerators: ContentfulContentModelMigrationGenerator[];
 
     try {
         const { default: module } = await import(migrationsFile);
 
         if (!module || !Array.isArray(module) || module.length === 0) {
-            throw new Error(`No migrations found in file ${migrationsFile}`);
+            throw new Error(`❌ No migrations found in file ${migrationsFile}`);
         }
 
         if (typeof module[0] !== "function") {
-            throw new Error(`Invalid migrations file ${migrationsFile}`);
+            throw new Error(`❌ Invalid migrations file ${migrationsFile}`);
         }
 
         migrationGenerators = module;
     } catch (error) {
         console.log(error);
-        throw new Error(`Failed to load migrations from file ${migrationsFile}`);
+        throw new Error(`❌ Unable to load migrations from file ${migrationsFile}`, {
+            cause: error,
+        });
+    }
+
+    if (!migrationGenerators) {
+        migrationGenerators = [];
     }
 
     const backendLanguage = process.env.CONTENTFUL_BACKEND_LANGUAGE ?? "en";

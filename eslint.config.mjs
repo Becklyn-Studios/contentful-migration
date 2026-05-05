@@ -1,8 +1,8 @@
-import { nextJsConfig } from "@becklyn/eslint/next-js";
+import { config } from "@becklyn/eslint/base";
 
 /** @type {import("eslint").Linter.Config} */
 export default [
-    ...nextJsConfig,
+    ...config,
     {
         ignores: ["node_modules/", "dist/"],
     },

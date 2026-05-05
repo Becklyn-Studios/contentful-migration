@@ -1,4 +1,5 @@
-import { Environment } from "contentful-management";
+// import {  createClient } from "contentful-management";
+// import { runMigration } from "contentful-migration";
 import { runMigration } from "contentful-migration";
 import {
     ContentfulManagementClientConfig,
@@ -7,6 +8,7 @@ import {
     getExecutedMigrations,
 } from "./api";
 import { ContentfulContentModelMigration } from "./types";
+import { createClient } from "contentful-management";
 
 export const MIGRATIONS_MODEL_NAME = "migrationVersions";
 
@@ -14,38 +16,36 @@ export const executeMigrations = async (
     clientConfig: ContentfulManagementClientConfig,
     allMigrations: ContentfulContentModelMigration[]
 ) => {
-    const environment = await connectToContentfulManagementApi(clientConfig);
-    const locale = await getDefaultLocale(environment);
-    const executedMigrations = await getExecutedMigrations(environment, locale);
+    await connectToContentfulManagementApi(clientConfig);
+    const defaultLocale = await getDefaultLocale(clientConfig);
+    const executedMigrations = await getExecutedMigrations(clientConfig, defaultLocale);
     const filteredMigrations = allMigrations.filter(
         migration => !executedMigrations.includes(migration.key)
     );
 
-    await runMigrations(filteredMigrations, environment, locale, clientConfig);
+    await runMigrations(filteredMigrations, defaultLocale, clientConfig);
 };
 
 const runMigrations = async (
     migrations: ContentfulContentModelMigration[],
-    environment: Environment,
     locale: string,
     config: ContentfulManagementClientConfig
 ) => {
-    console.log(`Running ${migrations.length} migrations`);
+    console.log(`🔄 Running ${migrations.length} migrations`);
 
     for (const migration of migrations) {
-        await runSingleMigration(migration, environment, locale, config);
+        await runSingleMigration(migration, locale, config);
     }
 
-    console.log(`All migrations were successful`);
+    console.log(`✅ All migrations were successful`);
 };
 
 const runSingleMigration = async (
     migration: ContentfulContentModelMigration,
-    environment: Environment,
     locale: string,
     config: ContentfulManagementClientConfig
 ) => {
-    console.log(`Running migration "${migration.key}"`);
+    console.log(`🚀 Running migration "${migration.key}"`);
 
     await runMigration({
         migrationFunction: migration.migration,
@@ -55,20 +55,26 @@ const runSingleMigration = async (
         yes: true,
     });
 
-    console.log(`Migration "${migration.key}" succeeded`);
+    console.log(`✅ Migration "${migration.key}" succeeded`);
 
-    const newVersionEntry = await environment.createEntry(MIGRATIONS_MODEL_NAME, {
+    const client = createClient({ accessToken: config.managementToken });
+
+    const newVersionEntry = await client.entry.create({
+        contentTypeId: MIGRATIONS_MODEL_NAME,
+        environmentId: config.environmentId,
+        spaceId: config.spaceId,
+    }, {
         fields: {
-            version: {
-                [locale]: migration.key,
-            },
-            executedAt: {
-                [locale]: new Date().toString(),
-            },
-        },
+                    version: { [locale]: migration.key },
+                    executedAt: { [locale]: new Date().toString() },
+        }
     });
 
-    await newVersionEntry.publish();
+    await client.entry.publish({
+        entryId: newVersionEntry.sys.id,
+        environmentId: config.environmentId,
+        spaceId: config.spaceId,
+    }, newVersionEntry);
 
-    console.log(`Saved ${migration.key} to ${MIGRATIONS_MODEL_NAME}`);
+    console.log(`💾 Saved ${migration.key} to ${MIGRATIONS_MODEL_NAME}`);
 };
