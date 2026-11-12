@@ -1,9 +1,22 @@
 import { config } from "dotenv";
+import { readFileSync } from "node:fs";
 import { register } from "ts-node";
 import { register as registerPaths } from "tsconfig-paths";
 import { getMigrationsFromGenerators } from "@/migrations/generator";
 import { executeMigrations } from "@/migrations/migrator";
 import { BackendLanguage, ContentfulContentModelMigrationGenerator } from "@/migrations/types";
+
+// TS 6 deprecates "node" (TS5107), TS < 6 rejects "bundler" with module "commonjs" (TS5095).
+const getCommonJsModuleResolution = (): "bundler" | "node" => {
+    const typescriptPackageJson = require.resolve("typescript/package.json", {
+        paths: [process.cwd(), __dirname],
+    });
+    const { version } = JSON.parse(readFileSync(typescriptPackageJson, "utf8")) as {
+        version: string;
+    };
+
+    return Number.parseInt(version, 10) >= 6 ? "bundler" : "node";
+};
 
 export const executeMigrationCommand = async () => {
     console.log("🔄 Checking environment...");
@@ -22,13 +35,13 @@ export const executeMigrationCommand = async () => {
     register({
         transpileOnly: true,
         compilerOptions: {
-            baseUrl: ".",
+            rootDir: ".",
             target: "es2017",
             module: "commonjs",
+            moduleResolution: getCommonJsModuleResolution(),
             strict: true,
             skipLibCheck: true,
             esModuleInterop: true,
-            moduleResolution: "node",
             lib: ["es2017"],
         },
     });

@@ -1,10 +1,9 @@
 {
     "extends": "@becklyn/tsconfig/base.json",
     "compilerOptions": {
-        "baseUrl": ".",
         "module": "commonjs",
+        "moduleResolution": "bundler",
         "outDir": "./dist",
-        "moduleResolution": "node",
         "emitDeclarationOnly": true,
         "noEmit": false,
         "paths": { "@/migrations/*": ["./migrations/*"] }
