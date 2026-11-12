@@ -1,3 +1,9 @@
+# v0.4.0
+
+- (bug) Support TypeScript 6 when loading migrations: no deprecated `baseUrl` / `moduleResolution: "node"` for ts-node, explicit `rootDir` (fixes TS5011, TS5101, TS5107)
+- (improvement) Pick ts-node's `moduleResolution` from the consumer's TypeScript version (`bundler` for TS >= 6, `node` below), TypeScript 5.x keeps working
+- (internal) Build with TypeScript 6
+
 # v0.3.0
 
 - (bc) Require node 22

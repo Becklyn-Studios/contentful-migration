@@ -1,6 +1,6 @@
 {
     "name": "@becklyn/contentful-migration",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 0",
         "format": "eslint . --fix && prettier --write \"**/*.{ts,tsx,json,scss,css}\"",
@@ -36,7 +36,7 @@
         "@becklyn/tsconfig": "^1.1.3",
         "@swc/cli": "^0.8.1",
         "@swc/core": "^1.15.33",
-        "typescript": "^5.9.3"
+        "typescript": "^6.0.3"
     },
     "prettier": "@becklyn/prettier"
 }
